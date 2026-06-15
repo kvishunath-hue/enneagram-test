@@ -12,6 +12,9 @@
     --shadow:0 14px 40px rgba(0,0,0,.45);
   }
   *{box-sizing:border-box;margin:0;padding:0}
+  ::selection{background:rgba(216,166,87,.32);color:var(--ink)}
+  :focus{outline:none}
+  :focus-visible{outline:2px solid var(--gold);outline-offset:3px;border-radius:8px}
   html,body{height:100%}
   body{
     background:radial-gradient(1200px 700px at 50% -10%,#221d18 0%,var(--bg) 60%);
