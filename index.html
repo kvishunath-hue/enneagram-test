@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Enneagram — Core · Wing · Instincts</title>
+<style>
+  :root{
+    --bg:#15120f; --bg2:#1d1915; --card:#241f1a; --card-h:#2e2822;
+    --line:#3a332b; --ink:#f4ece0; --mut:#a89a87; --dim:#7c7164;
+    --gold:#d8a657; --gold-d:#b3833f; --rose:#cf7a6a; --sage:#9bb08a;
+    --shadow:0 14px 40px rgba(0,0,0,.45);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    background:radial-gradient(1200px 700px at 50% -10%,#221d18 0%,var(--bg) 60%);
+    color:var(--ink);
+    font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    display:flex;align-items:flex-start;justify-content:center;
+    padding:32px 18px 64px;-webkit-font-smoothing:antialiased;
+  }
+  .wrap{width:100%;max-width:660px}
+  header{text-align:center;margin-bottom:22px}
+  header .k{letter-spacing:.32em;font-size:11px;text-transform:uppercase;color:var(--gold);font-weight:600}
+  header h1{font-size:27px;font-weight:650;margin:8px 0 4px;letter-spacing:.2px}
+  header p{color:var(--mut);font-size:13.5px;max-width:460px;margin:0 auto}
+
+  .bar{height:5px;background:var(--bg2);border-radius:99px;overflow:hidden;margin:22px 0 6px;border:1px solid var(--line)}
+  .bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--gold-d),var(--gold));transition:width .4s cubic-bezier(.4,0,.2,1)}
+  .step-meta{display:flex;justify-content:space-between;font-size:11px;color:var(--dim);letter-spacing:.08em;text-transform:uppercase;margin-bottom:18px}
+
+  .card{background:linear-gradient(180deg,var(--card),var(--bg2));border:1px solid var(--line);border-radius:18px;padding:26px 24px;box-shadow:var(--shadow)}
+  .q{font-size:19px;font-weight:600;line-height:1.4;margin-bottom:18px}
+  .q .sec{display:block;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);font-weight:700;margin-bottom:9px}
+
+  .opt{display:flex;gap:13px;align-items:flex-start;width:100%;text-align:left;
+    background:var(--card-h);border:1px solid var(--line);border-radius:13px;
+    padding:14px 15px;margin-bottom:11px;cursor:pointer;color:var(--ink);
+    transition:transform .12s ease,border-color .15s,background .15s;font-size:15px;line-height:1.45}
+  .opt:hover{border-color:var(--gold-d);background:#332c24;transform:translateY(-1px)}
+  .opt:active{transform:translateY(0)}
+  .opt .dot{flex:0 0 22px;height:22px;border-radius:50%;border:2px solid var(--dim);margin-top:1px;transition:.15s}
+  .opt:hover .dot{border-color:var(--gold)}
+  .opt.sel{border-color:var(--gold);background:#3a3024}
+  .opt.sel .dot{border-color:var(--gold);background:var(--gold);box-shadow:inset 0 0 0 3px var(--card-h)}
+
+  .nav{display:flex;justify-content:space-between;margin-top:20px;gap:12px}
+  button.btn{background:transparent;border:1px solid var(--line);color:var(--mut);border-radius:10px;
+    padding:10px 18px;font-size:14px;cursor:pointer;transition:.15s;font-weight:500}
+  button.btn:hover{color:var(--ink);border-color:var(--mut)}
+  button.btn:disabled{opacity:.32;cursor:default}
+  button.go{background:linear-gradient(180deg,var(--gold),var(--gold-d));border:none;color:#241a09;font-weight:700}
+  button.go:hover{filter:brightness(1.06)}
+
+  /* results */
+  .res-hero{text-align:center;padding:30px 24px 26px}
+  .res-num{font-size:64px;font-weight:800;line-height:1;background:linear-gradient(180deg,var(--gold),var(--rose));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+  .res-name{font-size:24px;font-weight:700;margin:6px 0 2px}
+  .res-tri{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold)}
+  .res-stack{font-size:34px;font-weight:750;letter-spacing:.04em;margin-top:10px}
+  .res-stack small{font-size:14px;color:var(--mut);letter-spacing:.12em}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}
+  .pill{background:var(--card-h);border:1px solid var(--line);border-radius:12px;padding:13px 15px}
+  .pill .t{font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);margin-bottom:4px}
+  .pill .v{font-size:14.5px;line-height:1.4}
+  .stackrow{display:flex;gap:10px;margin-top:14px}
+  .stackrow .ins{flex:1;background:var(--card-h);border:1px solid var(--line);border-radius:12px;padding:12px;text-align:center}
+  .stackrow .ins b{display:block;font-size:18px;font-weight:750;color:var(--gold)}
+  .stackrow .ins span{font-size:11px;color:var(--mut)}
+  .stackrow .ins.lead{border-color:var(--gold)}
+  .stackrow .ins.blind{opacity:.62}
+  .note{font-size:12.5px;color:var(--dim);margin-top:18px;line-height:1.55;border-top:1px solid var(--line);padding-top:14px}
+  .runner{font-size:12.5px;color:var(--mut);margin-top:8px;text-align:center}
+  @media(max-width:480px){.grid2{grid-template-columns:1fr}.res-num{font-size:54px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="k">Enneagram</div>
+    <h1>Core · Wing · Instincts</h1>
+    <p>A short triangulation test — center, social style, and coping stance — to pin your type more reliably than a trait quiz.</p>
+  </header>
+
+  <div class="bar"><i id="prog"></i></div>
+  <div class="step-meta"><span id="phase">—</span><span id="count">—</span></div>
+
+  <div id="app" class="card"></div>
+</div>
+
+<script>
+/* ---------- TYPE DEFINITIONS ----------
+   horn: Assertive(A) / Compliant-dutiful(C) / Withdrawn(W)
+   harm: Positive(P) / Competency(K) / Reactive(R)
+   center: Gut(G) / Heart(H) / Head(D)
+   Each (horn,harm) pair is unique across the 9 types. */
+const TYPES = {
+  1:{horn:'C',harm:'K',center:'G',name:'The Reformer',  tri:'Gut · Anger',  desire:'To be good, principled, and right',      fear:'Being corrupt, defective, or wrong'},
+  2:{horn:'C',harm:'P',center:'H',name:'The Helper',    tri:'Heart · Shame',desire:'To feel loved and needed',               fear:'Being unwanted or unworthy of love'},
+  3:{horn:'A',harm:'K',center:'H',name:'The Achiever',  tri:'Heart · Shame',desire:'To feel valuable and worthwhile',        fear:'Being worthless, a failure'},
+  4:{horn:'W',harm:'R',center:'H',name:'The Individualist',tri:'Heart · Shame',desire:'To be authentically, uniquely oneself',fear:'Having no identity or significance'},
+  5:{horn:'W',harm:'K',center:'D',name:'The Investigator',tri:'Head · Fear', desire:'To be capable and self-sufficient',      fear:'Being useless, overwhelmed, depleted'},
+  6:{horn:'C',harm:'R',center:'D',name:'The Loyalist',  tri:'Head · Fear',  desire:'To have security and support',            fear:'Being without guidance or support'},
+  7:{horn:'A',harm:'P',center:'D',name:'The Enthusiast',tri:'Head · Fear',  desire:'To be satisfied, free, and content',     fear:'Being deprived or trapped in pain'},
+  8:{horn:'A',harm:'R',center:'G',name:'The Challenger',tri:'Gut · Anger',  desire:'To protect oneself and stay in control', fear:'Being harmed or controlled by others'},
+  9:{horn:'W',harm:'P',center:'G',name:'The Peacemaker',tri:'Gut · Anger',  desire:'Inner and outer peace and harmony',       fear:'Loss, separation, fragmentation'}
+};
+
+/* ---------- CORE QUESTIONS (8): 3 social-style, 3 coping, 2 center ---------- */
+const coreQ = [
+  {sec:'Social style', q:'When you really want something to happen, your first instinct is to…',
+   opts:[
+     {t:'Push for it directly and make it happen — assert yourself and move.', g:'A'},
+     {t:'Work out the right, responsible thing to do and meet the obligation.', g:'C'},
+     {t:'Step back, withdraw into your own space, and let it unfold in your time.', g:'W'}]},
+  {sec:'Social style', q:'Under real pressure, you tend to…',
+   opts:[
+     {t:'Take charge, expand, and drive the agenda.', g:'A'},
+     {t:'Check what is expected of you and do your duty.', g:'C'},
+     {t:'Pull inward, conserve energy, and protect your independence.', g:'W'}]},
+  {sec:'Social style', q:'People who know you would most say you…',
+   opts:[
+     {t:'Go after what you want — forceful, direct, hard to stop.', g:'A'},
+     {t:'Are dependable and tuned to what you "should" do.', g:'C'},
+     {t:'Keep to yourself, with a rich and private inner world.', g:'W'}]},
+
+  {sec:'Coping stance', q:'When something goes wrong, you cope by…',
+   opts:[
+     {t:'Reframing it, staying upbeat, and keeping options open.', g:'P'},
+     {t:'Detaching from the emotion to stay objective and effective.', g:'K'},
+     {t:'Feeling it fully and wanting others to meet you in it.', g:'R'}]},
+  {sec:'Coping stance', q:'When you have a problem, you most want others to…',
+   opts:[
+     {t:'Keep things light and not drag you into negativity.', g:'P'},
+     {t:'Trust that you will handle it competently and correctly.', g:'K'},
+     {t:'Match your intensity and give you a real, felt response.', g:'R'}]},
+  {sec:'Coping stance', q:'Your default relationship to difficult feelings is to…',
+   opts:[
+     {t:'Minimise or skip past them — accentuate the positive.', g:'P'},
+     {t:'Set them aside so they don’t get in the way of doing things well.', g:'K'},
+     {t:'Amplify and express them — authenticity over comfort.', g:'R'}]},
+
+  {sec:'Core driver', q:'Underneath everything, the quiet pressure you carry feels most like…',
+   opts:[
+     {t:'A sense of how things should be — instinct, standards, gut "rightness".', g:'G'},
+     {t:'A concern with worth, image, and being valued or connected.', g:'H'},
+     {t:'A low hum of anxiety — anticipating what could go wrong.', g:'D'}]},
+  {sec:'Core driver', q:'The thing you most quietly protect is…',
+   opts:[
+     {t:'Your autonomy and your boundaries — not being controlled or wronged.', g:'G'},
+     {t:'Your identity and how you’re seen — being someone of value.', g:'H'},
+     {t:'Your sense of security — having enough certainty to feel safe.', g:'D'}]}
+];
+
+/* ---------- INSTINCT QUESTIONS (6) ---------- */
+const insQ = [
+  {q:'Walking into a new space, the first thing you register is…',
+   opts:[{t:'Comfort, exits, temperature — whether you have what you need.',g:'SP'},
+         {t:'The people and dynamics — where you fit in the room.',g:'SO'},
+         {t:'The one or two people you feel an immediate pull toward.',g:'SX'}]},
+  {q:'You feel most alive when…',
+   opts:[{t:'Life is stable, your nest is secure, your needs are handled.',g:'SP'},
+         {t:'You’re part of something — contributing, connected, in the mix.',g:'SO'},
+         {t:'There’s intensity and chemistry — a deep one-on-one charge.',g:'SX'}]},
+  {q:'Your energy and resources naturally flow toward…',
+   opts:[{t:'Security, health, home, savings, and steady routine.',g:'SP'},
+         {t:'People, causes, your role and standing in the group.',g:'SO'},
+         {t:'Whoever or whatever is fascinating you right now.',g:'SX'}]},
+  {q:'Stress first shows up as worry about…',
+   opts:[{t:'Resources, health, money, practical survival.',g:'SP'},
+         {t:'Your place in the group — being valued or left out.',g:'SO'},
+         {t:'A specific person or bond — attraction, being chosen.',g:'SX'}]},
+  {q:'In conversation you’re drawn to…',
+   opts:[{t:'Practical, grounded, genuinely useful talk.',g:'SP'},
+         {t:'Group threads — who’s doing what, how it all connects.',g:'SO'},
+         {t:'Deep, charged, intimate or provocative exchange.',g:'SX'}]},
+  {q:'Others might say you over-invest in…',
+   opts:[{t:'Self-sufficiency and your own comfort.',g:'SP'},
+         {t:'Reading the room and your reputation.',g:'SO'},
+         {t:'Intensity and the people who magnetise you.',g:'SX'}]}
+];
+
+const INS = {SP:{n:'Self-Preservation',d:'body · safety · comfort · resources'},
+             SO:{n:'Social',d:'belonging · group · status · contribution'},
+             SX:{n:'One-to-One',d:'intensity · chemistry · charged bonds'}};
+
+/* ---------- STATE ---------- */
+const total = coreQ.length + 1 /*wing*/ + insQ.length; // +1 wing step inserted after core
+let step = 0;                 // 0..coreQ.length-1 core, then wing, then instincts, then result
+let coreAns = Array(coreQ.length).fill(null);
+let insAns  = Array(insQ.length).fill(null);
+let wingChoice = null;        // neighbor type number
+let result = null;            // computed core type number
+
+const app = document.getElementById('app');
+const prog = document.getElementById('prog');
+const phaseEl = document.getElementById('phase');
+const countEl = document.getElementById('count');
+
+function tally(){
+  const c={A:0,C:0,W:0,P:0,K:0,R:0,G:0,H:0,D:0};
+  coreAns.forEach((a,i)=>{ if(a!=null) c[coreQ[i].opts[a].g]++; });
+  return c;
+}
+function scoreTypes(){
+  const c=tally(); const s={};
+  for(const n in TYPES){const t=TYPES[n]; s[n]=c[t.horn]+c[t.harm]+c[t.center];}
+  return s;
+}
+function topType(){
+  const s=scoreTypes();
+  let best=[]; let max=-1;
+  for(const n in s){ if(s[n]>max){max=s[n];best=[+n];} else if(s[n]===max){best.push(+n);} }
+  // tie-break: higher combined horn+harm signal (ignore center), else lowest number
+  if(best.length>1){
+    const c=tally();
+    best.sort((a,b)=> (c[TYPES[b].horn]+c[TYPES[b].harm]) - (c[TYPES[a].horn]+c[TYPES[a].harm]) || a-b );
+  }
+  // runner-up
+  const ranked=Object.keys(s).map(Number).sort((a,b)=>s[b]-s[a]);
+  return {core:best[0], runner: ranked.find(n=>n!==best[0])};
+}
+function neighbors(n){ const lo=n===1?9:n-1; const hi=n===9?1:n+1; return [lo,hi]; }
+function instinctStack(){
+  const c={SP:0,SO:0,SX:0};
+  insAns.forEach((a,i)=>{ if(a!=null) c[insQ[i].opts[a].g]++; });
+  const order=['SP','SX','SO']; // stable tie-break priority
+  return Object.keys(c).sort((a,b)=> c[b]-c[a] || order.indexOf(a)-order.indexOf(b));
+}
+
+/* ---------- RENDER ---------- */
+function setProgress(done){
+  prog.style.width = (done/total*100)+'%';
+  countEl.textContent = Math.min(done+1,total)+' / '+total;
+}
+function optionMarkup(opts, selected, handler){
+  return opts.map((o,i)=>`<button class="opt ${selected===i?'sel':''}" data-i="${i}">
+      <span class="dot"></span><span>${o.t}</span></button>`).join('');
+}
+
+function render(){
+  // CORE
+  if(step < coreQ.length){
+    const q=coreQ[step];
+    phaseEl.textContent='Core type';
+    setProgress(step);
+    app.innerHTML = `<div class="q"><span class="sec">${q.sec}</span>${q.q}</div>
+      ${optionMarkup(q.opts, coreAns[step])}
+      <div class="nav">
+        <button class="btn" id="back" ${step===0?'disabled':''}>← Back</button>
+        <button class="btn go" id="next" ${coreAns[step]==null?'disabled':''}>Next →</button>
+      </div>`;
+    app.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{coreAns[step]=+b.dataset.i;step++;render();});
+    document.getElementById('back').onclick=()=>{step--;render();};
+    document.getElementById('next').onclick=()=>{if(coreAns[step]!=null){step++;render();}};
+    return;
+  }
+  // WING (one tailored question)
+  if(step === coreQ.length){
+    const {core}=topType(); result=core;
+    const [lo,hi]=neighbors(core);
+    phaseEl.textContent='Wing';
+    setProgress(step);
+    const card=(n)=>`<button class="opt" data-w="${n}"><span class="dot"></span>
+      <span><b style="color:var(--gold)">${n} — ${TYPES[n].name}</b><br>
+      <span style="color:var(--mut);font-size:13.5px">${TYPES[n].desire}.</span></span></button>`;
+    app.innerHTML=`<div class="q"><span class="sec">Your wing</span>
+      You came out as type <b>${core} — ${TYPES[core].name}</b>.
+      Which neighbouring flavour colours you more?</div>
+      ${card(lo)}${card(hi)}
+      <div class="nav"><button class="btn" id="back">← Back</button><span></span></div>`;
+    app.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{wingChoice=+b.dataset.w;step++;render();});
+    document.getElementById('back').onclick=()=>{step--;render();};
+    return;
+  }
+  // INSTINCTS
+  const insIdx = step - coreQ.length - 1;
+  if(insIdx < insQ.length){
+    const q=insQ[insIdx];
+    phaseEl.textContent='Instinct stacking';
+    setProgress(step);
+    app.innerHTML=`<div class="q"><span class="sec">Instinct ${insIdx+1} of ${insQ.length}</span>${q.q}</div>
+      ${optionMarkup(q.opts, insAns[insIdx])}
+      <div class="nav">
+        <button class="btn" id="back">← Back</button>
+        <button class="btn go" id="next" ${insAns[insIdx]==null?'disabled':''}>${insIdx===insQ.length-1?'See result ✦':'Next →'}</button>
+      </div>`;
+    app.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{insAns[insIdx]=+b.dataset.i;step++;render();});
+    document.getElementById('back').onclick=()=>{step--;render();};
+    document.getElementById('next').onclick=()=>{if(insAns[insIdx]!=null){step++;render();}};
+    return;
+  }
+  // RESULT
+  renderResult();
+}
+
+function renderResult(){
+  phaseEl.textContent='Result';
+  prog.style.width='100%'; countEl.textContent=total+' / '+total;
+  const t=TYPES[result];
+  const wing = wingChoice ? `${result}w${wingChoice}` : `${result}`;
+  const st=instinctStack();
+  const {runner}=topType();
+  const stackStr = st.map(x=>x.toLowerCase()).join('/');
+  app.innerHTML=`
+    <div class="res-hero">
+      <div class="res-num">${result}${wingChoice?`<span style="font-size:30px">w${wingChoice}</span>`:''}</div>
+      <div class="res-name">${t.name}</div>
+      <div class="res-tri">${t.tri}</div>
+      <div class="res-stack">${stackStr}<br><small>${st.map(x=>INS[x].n).join(' › ')}</small></div>
+    </div>
+    <div class="grid2">
+      <div class="pill"><div class="t">Core desire</div><div class="v">${t.desire}.</div></div>
+      <div class="pill"><div class="t">Core fear</div><div class="v">${t.fear}.</div></div>
+    </div>
+    <div class="stackrow">
+      ${st.map((x,i)=>`<div class="ins ${i===0?'lead':''} ${i===2?'blind':''}">
+        <b>${x}</b><span>${INS[x].n}</span><br><span style="font-size:10px">${INS[x].d}</span>
+        ${i===0?'<br><span style="color:var(--gold);font-size:10px">dominant</span>':''}
+        ${i===2?'<br><span style="font-size:10px">blind spot</span>':''}</div>`).join('')}
+    </div>
+    <div class="runner">Closest alternative: <b>type ${runner} — ${TYPES[runner].name}</b>. If <b>${result}</b> doesn’t ring true, read ${runner} next.</div>
+    <div class="note"><b>How this was read:</b> your answers placed you in the
+      <b>${({A:'Assertive',C:'Dutiful',W:'Withdrawn'})[t.horn]}</b> social style ×
+      <b>${({P:'Positive-Outlook',K:'Competency',R:'Reactive'})[t.harm]}</b> coping stance —
+      a pairing unique to type ${result}, confirmed by your <b>${({G:'Gut',H:'Heart',D:'Head'})[t.center]}</b>-centre driver.
+      The wing and instinct stack are self-selected. Treat this as a strong hypothesis, not a verdict —
+      sit with the type description for a few days before you trust it.</div>
+    <div class="nav"><button class="btn" id="restart">↻ Retake</button><span></span></div>`;
+  document.getElementById('restart').onclick=()=>{
+    step=0;coreAns=Array(coreQ.length).fill(null);insAns=Array(insQ.length).fill(null);
+    wingChoice=null;result=null;render();
+  };
+}
+
+render();
+</script>
+</body>
+</html>
