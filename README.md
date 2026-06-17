@@ -1,21 +1,32 @@
-# Enneagram — Core · Wing · Instincts
+# Enneagram — Type · Wing · Instincts
 
-A short, self-contained Enneagram test that identifies your **core type**, **wing**, and **instinctual stacking** — in a single HTML file with no dependencies.
+A detailed, self-contained Enneagram test that identifies your **core type**, **wing**, **tritype**, and **instinctual stacking** — then gives a full results breakdown. One HTML file, no dependencies, runs entirely offline.
 
 **Live:** https://kvishunath-hue.github.io/enneagram-test/
 
 ## How it works
 
-Rather than scoring surface traits, it triangulates each type from three independent angles, so the result is cross-checked rather than tallied:
+**45 statements**, each rated 1–5 (*“Not me”* → *“Very me”*). Every one of the nine types is measured **directly** with four motivation-focused items (plus three items per instinct), interleaved so no type clusters together. Because each type accumulates its own score, the result is a ranked profile rather than a single forced guess.
 
-- **Core (8 questions)** — *social style* (Assertive / Dutiful / Withdrawn), *coping stance* (Positive-Outlook / Competency / Reactive), and *center* (Gut / Heart / Head). The social-style × coping-stance pairing is unique to each of the nine types; the center confirms it.
-- **Wing** — the two neighbours of your core type are offered with their flavours; you pick the one that fits.
-- **Instincts (6 questions)** — tallies Self-Preservation / Social / One-to-One into a full ranked stack (e.g. `sp/sx/so`), flagging your dominant instinct and your blind spot.
+- **Core type** — the highest-scoring of the nine.
+- **Wing** — the higher-scoring of your two circle neighbours (e.g. `4w5`); flagged *balanced* when they're close.
+- **Tritype** — your top type in each of the three centres (Body / Heart / Head).
+- **Instinctual stacking** — Self-Preservation / Social / One-to-One ranked into a stack (e.g. `sp/sx/so`), with your dominant and blind-spot called out.
+- **Confidence** — the gap between your top type and runner-up is reported as High / Moderate / Close call, so a near-tie is never passed off as certainty.
 
-The result screen shows type + name, the triad it sits in, core desire/fear, the instinct stack, the closest alternative type, and a plain-English trace of how the type was read.
+## Detailed results
 
-> A 14-question instrument is a strong hypothesis, not a verdict. Sit with the type description before you trust it.
+- Full **score bars** for all nine types
+- The **Enneagram diagram** with your core lit, your wing outlined, and your **growth** (integration) and **stress** (disintegration) arrows drawn
+- A per-type deep-dive: core motivation, **core desire & fear**, signature traits, at-your-best, under-stress, the growth & stress paths, and a growth tip
+- Instinct-stack meanings, your centre and its core emotion, possible mistypes, and a **copy-results** button
+
+## Robustness
+
+Self-contained, offline, responsive (desktop + mobile). Scoring defends against ties, blank, and all-identical answers — every input produces a coherent result, and degenerate inputs are honestly flagged as low-confidence.
+
+> A 45-item test is a strong starting hypothesis, not a verdict. Type is defined by inner **motivation** — your core fear and desire — not by behaviour. Sit with your result, and read your runner-up if it doesn't fit.
 
 ## Use
 
-Open `index.html` in any browser — it runs entirely offline.
+Open `index.html` in any browser.

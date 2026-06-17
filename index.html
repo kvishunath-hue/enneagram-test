@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Enneagram — Core · Wing · Instincts</title>
+<title>Enneagram — Detailed Type, Wing &amp; Instinct Test</title>
 <style>
   :root{
     --bg:#15120f; --bg2:#1d1915; --card:#241f1a; --card-h:#2e2822;
@@ -21,34 +21,40 @@
     color:var(--ink);
     font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
     display:flex;align-items:flex-start;justify-content:center;
-    padding:32px 18px 64px;-webkit-font-smoothing:antialiased;
+    padding:32px 18px 72px;-webkit-font-smoothing:antialiased;
   }
-  .wrap{width:100%;max-width:660px}
+  .wrap{width:100%;max-width:680px}
   header{text-align:center;margin-bottom:22px}
   header .k{letter-spacing:.32em;font-size:11px;text-transform:uppercase;color:var(--gold);font-weight:600}
-  header h1{font-size:27px;font-weight:650;margin:8px 0 4px;letter-spacing:.2px}
-  header p{color:var(--mut);font-size:13.5px;max-width:460px;margin:0 auto}
+  header h1{font-size:26px;font-weight:650;margin:8px 0 4px;letter-spacing:.2px}
+  header p{color:var(--mut);font-size:13.5px;max-width:480px;margin:0 auto}
 
   .bar{height:5px;background:var(--bg2);border-radius:99px;overflow:hidden;margin:22px 0 6px;border:1px solid var(--line)}
-  .bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--gold-d),var(--gold));transition:width .4s cubic-bezier(.4,0,.2,1)}
+  .bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--gold-d),var(--gold));transition:width .35s cubic-bezier(.4,0,.2,1)}
   .step-meta{display:flex;justify-content:space-between;font-size:11px;color:var(--dim);letter-spacing:.08em;text-transform:uppercase;margin-bottom:18px}
 
   .card{background:linear-gradient(180deg,var(--card),var(--bg2));border:1px solid var(--line);border-radius:18px;padding:26px 24px;box-shadow:var(--shadow)}
-  .q{font-size:19px;font-weight:600;line-height:1.4;margin-bottom:18px}
-  .q .sec{display:block;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);font-weight:700;margin-bottom:9px}
+  .q{font-size:20px;font-weight:600;line-height:1.42;margin-bottom:6px}
+  .q .sec{display:block;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);font-weight:700;margin-bottom:11px}
+  .scalehint{font-size:12px;color:var(--dim);margin:2px 0 16px}
 
-  .opt{display:flex;gap:13px;align-items:flex-start;width:100%;text-align:left;
+  /* likert scale */
+  .scale{display:flex;gap:8px}
+  .sbtn{flex:1;display:flex;flex-direction:column;align-items:center;gap:9px;
     background:var(--card-h);border:1px solid var(--line);border-radius:13px;
-    padding:14px 15px;margin-bottom:11px;cursor:pointer;color:var(--ink);
-    transition:transform .12s ease,border-color .15s,background .15s;font-size:15px;line-height:1.45}
-  body:not(.nohover) .opt:hover{border-color:var(--gold-d);background:#332c24;transform:translateY(-1px)}
-  .opt:active{transform:translateY(0)}
-  .opt .dot{flex:0 0 22px;height:22px;border-radius:50%;border:2px solid var(--dim);margin-top:1px;transition:.15s}
-  body:not(.nohover) .opt:hover .dot{border-color:var(--gold)}
-  .opt.sel{border-color:var(--gold);background:#3a3024}
-  .opt.sel .dot{border-color:var(--gold);background:var(--gold);box-shadow:inset 0 0 0 3px var(--card-h)}
+    padding:15px 5px 11px;cursor:pointer;color:var(--mut);
+    transition:transform .12s ease,border-color .15s,background .15s,color .15s}
+  body:not(.nohover) .sbtn:hover{border-color:var(--gold-d);background:#332c24;color:var(--ink);transform:translateY(-2px)}
+  .sbtn .ring{width:22px;height:22px;border-radius:50%;border:2px solid currentColor;transition:.15s}
+  .sbtn .lab{font-size:10.5px;line-height:1.15;text-align:center;letter-spacing:.01em}
+  .sbtn.s1{color:#a98e74}.sbtn.s2{color:#b39a7d}
+  .sbtn.s4{color:var(--gold-d)}.sbtn.s5{color:var(--gold)}
+  .sbtn.s3 .ring{width:18px;height:18px}
+  .sbtn.s1 .ring,.sbtn.s5 .ring{width:25px;height:25px}
+  .sbtn.sel{border-color:var(--gold);background:#3a3024;color:var(--ink)}
+  .sbtn.sel .ring{background:currentColor;box-shadow:inset 0 0 0 3px var(--card-h)}
 
-  .nav{display:flex;justify-content:space-between;margin-top:20px;gap:12px}
+  .nav{display:flex;justify-content:space-between;margin-top:22px;gap:12px}
   button.btn{background:transparent;border:1px solid var(--line);color:var(--mut);border-radius:10px;
     padding:10px 18px;font-size:14px;cursor:pointer;transition:.15s;font-weight:500}
   button.btn:hover{color:var(--ink);border-color:var(--mut)}
@@ -56,351 +62,477 @@
   button.go{background:linear-gradient(180deg,var(--gold),var(--gold-d));border:none;color:#241a09;font-weight:700}
   button.go:hover{filter:brightness(1.06)}
 
-  /* results */
-  .res-hero{text-align:center;padding:30px 24px 26px}
-  .res-num{font-size:64px;font-weight:800;line-height:1;background:linear-gradient(180deg,var(--gold),var(--rose));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
-  .res-name{font-size:24px;font-weight:700;margin:6px 0 2px}
-  .res-tri{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold)}
-  .res-stack{font-size:34px;font-weight:750;letter-spacing:.04em;margin-top:10px}
-  .res-stack small{font-size:14px;color:var(--mut);letter-spacing:.12em}
-  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}
-  .pill{background:var(--card-h);border:1px solid var(--line);border-radius:12px;padding:13px 15px}
-  .pill .t{font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);margin-bottom:4px}
-  .pill .v{font-size:14.5px;line-height:1.4}
-  .stackrow{display:flex;gap:10px;margin-top:14px}
-  .stackrow .ins{flex:1;background:var(--card-h);border:1px solid var(--line);border-radius:12px;padding:12px;text-align:center}
-  .stackrow .ins b{display:block;font-size:18px;font-weight:750;color:var(--gold)}
-  .stackrow .ins span{font-size:11px;color:var(--mut)}
-  .stackrow .ins.lead{border-color:var(--gold)}
-  .stackrow .ins.blind{opacity:.62}
-  .note{font-size:12.5px;color:var(--dim);margin-top:18px;line-height:1.55;border-top:1px solid var(--line);padding-top:14px}
-  .runner{font-size:12.5px;color:var(--mut);margin-top:8px;text-align:center}
-  @media(max-width:480px){.grid2{grid-template-columns:1fr}.res-num{font-size:54px}}
-
-  /* intro + enneagram diagram */
+  /* intro */
   .intro{padding:22px 22px 24px}
   .intro h2{font-size:20px;font-weight:700;text-align:center;margin-bottom:8px}
-  .intro .lead{color:var(--mut);font-size:13.5px;text-align:center;max-width:470px;margin:0 auto;line-height:1.5}
+  .intro .lead{color:var(--mut);font-size:13.5px;text-align:center;max-width:480px;margin:0 auto;line-height:1.5}
   .intro em{color:var(--ink);font-style:normal;font-weight:600}
-  .enn{width:208px;height:208px;display:block;margin:16px auto 6px}
-  .enn-ring{fill:none;stroke:var(--line);stroke-width:1.5}
-  .enn-inner line{stroke:var(--line);stroke-width:1.3}
-  .enn-node circle{fill:var(--card-h);stroke:var(--dim);stroke-width:1.5}
-  .enn-node text{fill:var(--mut);font-size:13px;font-weight:700;text-anchor:middle}
-  .enn-node.wing circle{stroke:var(--gold-d);fill:#332c24}
-  .enn-node.wing text{fill:var(--ink)}
-  .enn-node.lit circle{fill:var(--gold);stroke:var(--gold);filter:drop-shadow(0 0 6px rgba(216,166,87,.55))}
-  .enn-node.lit text{fill:#241a09}
   .defs{margin-top:14px;display:flex;flex-direction:column;gap:9px}
   .def{background:var(--card-h);border:1px solid var(--line);border-radius:12px;padding:11px 14px}
   .def b{color:var(--gold);font-size:13.5px}
   .def p{color:var(--mut);font-size:12.8px;line-height:1.45;margin-top:2px}
+  .howto{margin-top:14px;background:rgba(216,166,87,.07);border:1px solid var(--gold-d);border-radius:12px;padding:12px 14px;font-size:12.8px;color:var(--mut);line-height:1.5}
+  .howto b{color:var(--ink)}
   .intro .tip{font-size:12px;color:var(--dim);text-align:center;margin-top:14px;line-height:1.55}
   .begin-wrap{margin-top:18px;text-align:center}
   .begin-wrap button{padding:13px 30px;font-size:15px;border-radius:11px}
-  .res-enn{margin-top:16px;text-align:center}
-  .res-enn .enn{margin:6px auto 4px}
-  .enn-cap{font-size:11px;color:var(--dim);letter-spacing:.03em}
+
+  /* enneagram diagram */
+  .enn{width:212px;height:212px;display:block;margin:16px auto 6px}
+  .enn-ring{fill:none;stroke:var(--line);stroke-width:1.5}
+  .enn-inner line{stroke:var(--line);stroke-width:1.3}
+  .enn .arrow.grow{stroke:var(--sage);stroke-width:2.3}
+  .enn .arrow.strain{stroke:var(--rose);stroke-width:2.3;stroke-dasharray:4 4}
+  .enn-node circle{fill:var(--card-h);stroke:var(--dim);stroke-width:1.5}
+  .enn-node text{fill:var(--mut);font-size:13px;font-weight:700;text-anchor:middle}
+  .enn-node.wing circle{stroke:var(--gold-d);stroke-width:2.4;fill:#332c24}
+  .enn-node.wing text{fill:var(--ink)}
+  .enn-node.grow circle{stroke:var(--sage);stroke-width:2.4}
+  .enn-node.grow text{fill:var(--sage)}
+  .enn-node.strain circle{stroke:var(--rose);stroke-width:2.4}
+  .enn-node.strain text{fill:var(--rose)}
+  .enn-node.lit circle{fill:var(--gold);stroke:var(--gold);filter:drop-shadow(0 0 6px rgba(216,166,87,.55))}
+  .enn-node.lit text{fill:#241a09}
+  .legend{display:flex;flex-wrap:wrap;justify-content:center;gap:10px 16px;font-size:11px;color:var(--dim);margin-top:4px}
+  .legend span{display:inline-flex;align-items:center;gap:5px}
+  .legend i{width:11px;height:11px;border-radius:50%;display:inline-block}
+
+  /* results */
+  .res-hero{text-align:center;padding:28px 22px 8px}
+  .res-num{font-size:62px;font-weight:800;line-height:1;background:linear-gradient(180deg,var(--gold),var(--rose));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+  .res-name{font-size:23px;font-weight:700;margin:6px 0 1px}
+  .res-nick{font-size:13px;color:var(--mut);margin-bottom:6px}
+  .res-tri{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold)}
+  .chips{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-top:14px}
+  .chip{background:var(--card-h);border:1px solid var(--line);border-radius:999px;padding:7px 14px;font-size:12.5px;color:var(--mut)}
+  .chip b{color:var(--ink);font-weight:700}
+
+  .conf{margin-top:18px;border-radius:12px;padding:12px 14px;font-size:12.8px;line-height:1.5;border:1px solid}
+  .conf.high{border-color:#5d7d4d;background:rgba(123,160,90,.12);color:#d2e0c4}
+  .conf.mod{border-color:var(--gold-d);background:rgba(216,166,87,.10);color:#ecd3a6}
+  .conf.low{border-color:#9a5a4d;background:rgba(207,122,106,.13);color:#ebc4ba}
+
+  .section{margin-top:20px;border-top:1px solid var(--line);padding-top:16px}
+  .section h3{font-size:11.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:11px}
+  .section p{font-size:13.5px;color:var(--mut);line-height:1.56;margin-bottom:9px}
+  .section p b,.section p strong{color:var(--ink)}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+  .pill{background:var(--card-h);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+  .pill .t{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin-bottom:4px}
+  .pill .v{font-size:13.5px;line-height:1.42;color:var(--ink)}
+
+  .bars{display:flex;flex-direction:column;gap:7px}
+  .bar-row{display:grid;grid-template-columns:104px 1fr 30px;gap:10px;align-items:center;font-size:12.5px}
+  .bar-row .nm{color:var(--mut);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .bar-row.me .nm{color:var(--ink);font-weight:700}
+  .track{height:9px;background:var(--bg2);border:1px solid var(--line);border-radius:99px;overflow:hidden}
+  .track i{display:block;height:100%;border-radius:99px;background:#5b5044;transition:width .5s ease}
+  .bar-row.me .track i{background:linear-gradient(90deg,var(--gold-d),var(--gold))}
+  .pct{text-align:right;color:var(--dim);font-variant-numeric:tabular-nums}
+
+  .arrows-row{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-top:4px}
+  .arrowbox{border:1px solid var(--line);border-radius:12px;padding:12px 14px;background:var(--card-h)}
+  .arrowbox .t{font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:5px;font-weight:700}
+  .arrowbox.g .t{color:var(--sage)} .arrowbox.s .t{color:var(--rose)}
+  .arrowbox .v{font-size:13px;color:var(--mut);line-height:1.45}
+  .arrowbox .v b{color:var(--ink)}
+
+  .insrow{display:flex;flex-direction:column;gap:9px}
+  .ins{display:flex;gap:12px;background:var(--card-h);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+  .ins .tag{flex:0 0 46px;font-size:17px;font-weight:800;color:var(--gold);text-align:center;align-self:center}
+  .ins.lead{border-color:var(--gold)} .ins.blind{opacity:.72}
+  .ins .nm{font-size:13.5px;font-weight:600;color:var(--ink)}
+  .ins .nm small{font-weight:400;color:var(--dim);letter-spacing:.04em}
+  .ins .ds{font-size:12.5px;color:var(--mut);line-height:1.45;margin-top:2px}
+
+  .note{font-size:12.5px;color:var(--dim);margin-top:18px;line-height:1.55;border-top:1px solid var(--line);padding-top:14px}
+  .resbtns{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap}
+  .resbtns button{flex:1;min-width:140px}
+  .toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(10px);background:#2e2822;border:1px solid var(--gold-d);color:var(--ink);padding:10px 18px;border-radius:10px;font-size:13px;opacity:0;transition:.28s;pointer-events:none;z-index:9}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  @media(max-width:520px){
+    .grid2,.arrows-row{grid-template-columns:1fr}
+    .res-num{font-size:52px}
+    .bar-row{grid-template-columns:88px 1fr 26px}
+    .sbtn .lab{font-size:9.5px}
+  }
 </style>
 </head>
 <body>
 <div class="wrap">
   <header>
     <div class="k">Enneagram</div>
-    <h1>Core · Wing · Instincts</h1>
-    <p>A short triangulation test — center, social style, and coping stance — to pin your type more reliably than a trait quiz.</p>
+    <h1>Type · Wing · Instincts</h1>
+    <p>A detailed 45-question test that scores all nine types directly, then reads your wing, tritype and instinctual stacking — with a full results breakdown.</p>
   </header>
-
   <div class="bar"><i id="prog"></i></div>
   <div class="step-meta"><span id="phase">—</span><span id="count">—</span></div>
-
   <div id="app" class="card"></div>
 </div>
+<div class="toast" id="toast"></div>
 
 <script>
-/* ---------- TYPE DEFINITIONS ----------
-   horn: Assertive(A) / Compliant-dutiful(C) / Withdrawn(W)
-   harm: Positive(P) / Competency(K) / Reactive(R)
-   center: Gut(G) / Heart(H) / Head(D)
-   Each (horn,harm) pair is unique across the 9 types. */
+/* ============================ TYPE LIBRARY ============================ */
 const TYPES = {
-  1:{horn:'C',harm:'K',center:'G',name:'The Reformer',  tri:'Gut · Anger',  desire:'To be good, principled, and right',      fear:'Being corrupt, defective, or wrong'},
-  2:{horn:'C',harm:'P',center:'H',name:'The Helper',    tri:'Heart · Shame',desire:'To feel loved and needed',               fear:'Being unwanted or unworthy of love'},
-  3:{horn:'A',harm:'K',center:'H',name:'The Achiever',  tri:'Heart · Shame',desire:'To feel valuable and worthwhile',        fear:'Being worthless, a failure'},
-  4:{horn:'W',harm:'R',center:'H',name:'The Individualist',tri:'Heart · Shame',desire:'To be authentically, uniquely oneself',fear:'Having no identity or significance'},
-  5:{horn:'W',harm:'K',center:'D',name:'The Investigator',tri:'Head · Fear', desire:'To be capable and self-sufficient',      fear:'Being useless, overwhelmed, depleted'},
-  6:{horn:'C',harm:'R',center:'D',name:'The Loyalist',  tri:'Head · Fear',  desire:'To have security and support',            fear:'Being without guidance or support'},
-  7:{horn:'A',harm:'P',center:'D',name:'The Enthusiast',tri:'Head · Fear',  desire:'To be satisfied, free, and content',     fear:'Being deprived or trapped in pain'},
-  8:{horn:'A',harm:'R',center:'G',name:'The Challenger',tri:'Gut · Anger',  desire:'To protect oneself and stay in control', fear:'Being harmed or controlled by others'},
-  9:{horn:'W',harm:'P',center:'G',name:'The Peacemaker',tri:'Gut · Anger',  desire:'Inner and outer peace and harmony',       fear:'Loss, separation, fragmentation'}
+  1:{name:'The Reformer', nick:'The Perfectionist · Principled idealist', center:'gut', tri:'Body · Anger',
+     desire:'To be good, principled, and have integrity', fear:'Being corrupt, defective, or wrong',
+     motivation:'You live by a high inner standard and feel driven to improve yourself and the world. “Rightness” is your compass, and a sharp inner critic is always running.',
+     traits:'Principled, conscientious, self-disciplined, orderly, and idealistic.',
+     best:'Wise, discerning, accepting and fair — able to quiet the critic and let “good enough” be enough.',
+     stress:'Rigid, judgmental, resentful and perfectionistic; held-in anger leaks out as irritation.',
+     grow:7, strain:4, flavor:'principled rigor and a drive to do things right',
+     tip:'Treat the inner critic as one voice, not the boss. Schedule play, and let “good enough” count.'},
+  2:{name:'The Helper', nick:'The Giver · Caring supporter', center:'heart', tri:'Heart · Shame',
+     desire:'To feel loved and wanted', fear:'Being unwanted or unworthy of love',
+     motivation:'You earn love and belonging by tuning into others’ needs. Your sense of worth gets tied to being needed, which makes your own needs hard to admit.',
+     traits:'Warm, generous, empathetic, attentive and relational.',
+     best:'Unconditionally caring and nurturing while honoring your own needs — generous with no strings.',
+     stress:'People-pleasing, intrusive and martyr-like; quiet resentment builds when giving isn’t returned.',
+     grow:4, strain:8, flavor:'warmth and a strong pull toward people',
+     tip:'Say your own needs out loud. Give from overflow, not to be owed.'},
+  3:{name:'The Achiever', nick:'The Performer · Driven star', center:'heart', tri:'Heart · Shame',
+     desire:'To feel valuable and worthwhile', fear:'Being worthless or a failure',
+     motivation:'You chase success and a winning image to feel valuable. Doing quietly becomes being, so you adapt your presentation to come across well.',
+     traits:'Driven, adaptable, efficient, image-aware and motivating.',
+     best:'Authentic, self-accepting and genuinely inspiring — valued for who you are, not only what you achieve.',
+     stress:'Over-driven, image-obsessed and self-deceiving; burnout from non-stop performing.',
+     grow:6, strain:9, flavor:'ambition, polish and image-awareness',
+     tip:'Ask “what do I actually feel and want?” apart from the win. Let people see the real you.'},
+  4:{name:'The Individualist', nick:'The Romantic · Sensitive original', center:'heart', tri:'Heart · Shame',
+     desire:'To be authentically yourself, with a clear identity', fear:'Having no identity or significance',
+     motivation:'You seek depth, beauty and authenticity, often feeling that something essential is missing that others seem to have.',
+     traits:'Sensitive, expressive, introspective, creative and emotionally honest.',
+     best:'Inspired, self-renewing and emotionally deep — at home in yourself and even in the ordinary.',
+     stress:'Moody, self-absorbed and withdrawn; amplifies feelings and pushes help away.',
+     grow:1, strain:2, flavor:'depth, feeling and individuality',
+     tip:'Treat envy as a signpost, then act. Anchor in routine — the ordinary holds meaning too.'},
+  5:{name:'The Investigator', nick:'The Observer · Cerebral specialist', center:'head', tri:'Head · Fear',
+     desire:'To be capable, competent and self-sufficient', fear:'Being useless, depleted or overwhelmed',
+     motivation:'You conserve energy and gather knowledge to feel secure and self-reliant, guarding your time, space and resources.',
+     traits:'Perceptive, analytical, private, independent and inventive.',
+     best:'Visionary and pioneering — engaged, present in your body and generous with what you know.',
+     stress:'Withdrawn and cerebral; hoards time, energy and information and isolates to over-think.',
+     grow:8, strain:7, flavor:'detachment and analytical depth',
+     tip:'Engage before you feel “fully ready.” Share what you know — presence beats more data.'},
+  6:{name:'The Loyalist', nick:'The Skeptic · Loyal guardian', center:'head', tri:'Head · Fear',
+     desire:'To have security, support and guidance', fear:'Being without support or certainty',
+     motivation:'You seek safety in an uncertain world by preparing, questioning and staying loyal. Your mind scans for what could go wrong.',
+     traits:'Committed, responsible, vigilant, witty and good at troubleshooting.',
+     best:'Courageous, grounded and trusting — a steady, loyal pillar who trusts their own inner authority.',
+     stress:'Anxious, suspicious and reactive; swings between obedience and rebellion toward authority.',
+     grow:9, strain:3, flavor:'loyalty, caution and a troubleshooting mind',
+     tip:'Catch the worst-case loop and act on your own judgment. Choose faith over reassurance.'},
+  7:{name:'The Enthusiast', nick:'The Epicure · Visionary optimist', center:'head', tri:'Head · Fear',
+     desire:'To be satisfied, content and free', fear:'Being deprived, trapped or in pain',
+     motivation:'You keep life stimulating and your options open to stay ahead of pain and limitation, always reaching for the next good thing.',
+     traits:'Upbeat, spontaneous, versatile, curious and quick.',
+     best:'Focused, joyous and deeply satisfied — able to stay present and find depth in the now.',
+     stress:'Restless, impulsive and escapist; over-extends and dodges hard feelings.',
+     grow:5, strain:1, flavor:'optimism, energy and a taste for options',
+     tip:'Stay with one thing and let discomfort be — depth is on the other side of it.'},
+  8:{name:'The Challenger', nick:'The Protector · Powerful leader', center:'gut', tri:'Body · Anger',
+     desire:'To protect yourself and control your own life', fear:'Being harmed, controlled or violated',
+     motivation:'You assert strength and stay in control to avoid being vulnerable or dominated, and you instinctively protect your own.',
+     traits:'Decisive, powerful, direct, protective and energetic.',
+     best:'Magnanimous and courageous — using strength to empower others, with a soft heart underneath.',
+     stress:'Domineering, combative and excessive; intimidates and steamrolls.',
+     grow:2, strain:5, flavor:'assertiveness and a will to take charge',
+     tip:'Let trusted people see the tender side. Real strength includes restraint.'},
+  9:{name:'The Peacemaker', nick:'The Mediator · Easygoing harmonizer', center:'gut', tri:'Body · Anger',
+     desire:'Inner and outer peace, harmony and stability', fear:'Loss, separation and fragmentation',
+     motivation:'You keep the peace and avoid conflict by going along and merging with others — sometimes forgetting your own priorities entirely.',
+     traits:'Easygoing, accepting, steady, supportive and harmonizing.',
+     best:'Self-possessed, present and dynamic — at peace yet able to show up fully and assert yourself.',
+     stress:'Stubborn, checked-out and avoidant; numbs and procrastinates to dodge tension.',
+     grow:3, strain:6, flavor:'ease, receptivity and a smoothing-over instinct',
+     tip:'Show up for your own agenda — your “no” and your presence matter. Anger is information.'}
+};
+const CENTERS={
+  gut:{label:'Body / Gut centre', types:[8,9,1], emo:'anger', about:'autonomy, control and right action'},
+  heart:{label:'Heart centre', types:[2,3,4], emo:'shame', about:'identity, image and connection'},
+  head:{label:'Head centre', types:[5,6,7], emo:'fear', about:'security, support and certainty'}
+};
+const INS={
+  SP:{n:'Self-Preservation', tag:'sp', dom:'You organise life around safety, comfort, health, resources and routine, and you notice when your physical environment is off.', blind:'When this is last, you can neglect your body, rest or finances until something forces the issue.'},
+  SO:{n:'Social', tag:'so', dom:'You orient by group, belonging, role and contribution; you read the room and care about your place in it.', blind:'When this is last, group politics and reputation feel like noise you would rather skip.'},
+  SX:{n:'One-to-One', tag:'sx', dom:'You seek intensity, chemistry and deep one-on-one connection, giving focused, magnetic attention.', blind:'When this is last, charged intimacy and “going there” with one person can feel unnecessary or overwhelming.'}
 };
 
-/* ---------- CORE QUESTIONS (8): 3 social-style, 3 coping, 2 center ---------- */
-const coreQ = [
-  {sec:'Social style', q:'When you really want something to happen, your first instinct is to…',
-   opts:[
-     {t:'Push for it directly and make it happen — assert yourself and move.', g:'A'},
-     {t:'Work out the right, responsible thing to do and meet the obligation.', g:'C'},
-     {t:'Step back, withdraw into your own space, and let it unfold in your time.', g:'W'}]},
-  {sec:'Social style', q:'Under real pressure, you tend to…',
-   opts:[
-     {t:'Take charge, expand, and drive the agenda.', g:'A'},
-     {t:'Check what is expected of you and do your duty.', g:'C'},
-     {t:'Pull inward, conserve energy, and protect your independence.', g:'W'}]},
-  {sec:'Social style', q:'People who know you would most say you…',
-   opts:[
-     {t:'Go after what you want — forceful, direct, hard to stop.', g:'A'},
-     {t:'Are dependable and tuned to what you "should" do.', g:'C'},
-     {t:'Keep to yourself, with a rich and private inner world.', g:'W'}]},
+/* ============================ QUESTION BANK ============================ */
+/* 4 statements per type (motivation-focused), rated 1–5. */
+const ITEMS={
+  1:['I have a strong inner critic that notices what is wrong or could be improved.',
+     'It matters deeply to me to be good, fair, and do the right thing.',
+     'I hold myself — and often others — to high standards and dislike sloppiness.',
+     'I tend to keep my anger in and stay controlled and proper, even when frustrated.'],
+  2:['I am very attuned to what other people need, often before they ask.',
+     'I feel most worthwhile when I am helping, supporting, or caring for someone.',
+     'I find it hard to admit or ask for what I need myself.',
+     'I can give a great deal and then feel unappreciated or quietly resentful.'],
+  3:['I am driven to achieve, succeed, and be seen as competent and impressive.',
+     'I adapt how I present myself to win approval or come across well.',
+     'Failing or looking bad in front of others is one of my deepest fears.',
+     'I tend to set feelings aside to keep performing and getting things done.'],
+  4:['I often feel different from others, as if something is missing that they have.',
+     'Being true to my own feelings matters to me more than fitting in.',
+     'I am drawn to depth, beauty and melancholy, and my emotions run strong.',
+     'I can long for what is distant or unavailable and feel the ordinary is not enough.'],
+  5:['I guard my time, energy and privacy, and need plenty of space to myself.',
+     'I feel safest when I deeply understand something and feel competent in it.',
+     'I tend to detach from my emotions and observe situations from a distance.',
+     'I would rather watch and think things through than be pulled into demands.'],
+  6:['I scan for what could go wrong and like to be prepared for problems.',
+     'I value loyalty and trust, but I question and doubt before I fully commit.',
+     'I look for security and support, yet feel ambivalent about authority.',
+     'My mind runs worst-case scenarios, and reassurance helps settle it.'],
+  7:['I chase variety, new experiences, and keeping my options open.',
+     'I instinctively stay upbeat and look ahead to avoid pain and limitation.',
+     'My mind jumps quickly to exciting possibilities and future plans.',
+     'I find it hard to stay with one thing or sit with uncomfortable feelings.'],
+  8:['I am assertive and direct, and I instinctively take charge of situations.',
+     'I protect myself and the people I care about, and I cannot stand being controlled.',
+     'I am comfortable with conflict and will confront things head-on.',
+     'Showing vulnerability is hard — I would rather be strong and in control.'],
+  9:['I keep the peace and go along with things to avoid conflict and tension.',
+     'I can lose track of my own priorities by merging with others’ agendas.',
+     'I am easygoing and seek comfort, harmony and a settled routine.',
+     'I tend to procrastinate or tune out rather than face what is pressing.']
+};
+/* 3 statements per instinct. */
+const INS_ITEMS={
+  SP:['I pay close attention to comfort, health, money, and having my practical needs handled.',
+      'I build routines and a secure home base, and I notice when my surroundings are off.',
+      'Under stress, I worry first about resources, safety and being self-sufficient.'],
+  SO:['I am tuned to group dynamics, my role, and where I stand or belong with others.',
+      'I invest energy in community, causes, reputation, or contributing to something bigger.',
+      'Under stress, I worry about being included, valued, or my standing with people.'],
+  SX:['I crave intensity and deep one-on-one connection, and I notice chemistry quickly.',
+      'I pour energy into the people or pursuits that magnetise me, sometimes to excess.',
+      'Under stress, I fixate on a specific person or attraction and the charge of that bond.']
+};
 
-  {sec:'Coping stance', q:'When something goes wrong, you cope by…',
-   opts:[
-     {t:'Reframing it, staying upbeat, and keeping options open.', g:'P'},
-     {t:'Detaching from the emotion to stay objective and effective.', g:'K'},
-     {t:'Feeling it fully and wanting others to meet you in it.', g:'R'}]},
-  {sec:'Coping stance', q:'When you have a problem, you most want others to…',
-   opts:[
-     {t:'Keep things light and not drag you into negativity.', g:'P'},
-     {t:'Trust that you will handle it competently and correctly.', g:'K'},
-     {t:'Match your intensity and give you a real, felt response.', g:'R'}]},
-  {sec:'Coping stance', q:'Your default relationship to difficult feelings is to…',
-   opts:[
-     {t:'Minimise or skip past them — accentuate the positive.', g:'P'},
-     {t:'Set them aside so they don’t get in the way of doing things well.', g:'K'},
-     {t:'Amplify and express them — authenticity over comfort.', g:'R'}]},
+/* Build an interleaved question list so no type clusters together. */
+const TYPE_ROUNDS=[[3,7,1,5,9,2,8,4,6],[2,8,4,1,7,3,9,5,6],[9,5,4,8,2,6,1,7,3],[4,1,7,3,6,9,5,2,8]];
+const INS_ROUNDS=[['SP','SO','SX'],['SO','SX','SP'],['SX','SP','SO']];
+const questions=[];
+TYPE_ROUNDS.forEach((order,r)=>order.forEach(t=>questions.push({kind:'core',t,text:ITEMS[t][r]})));
+INS_ROUNDS.forEach((order,r)=>order.forEach(g=>questions.push({kind:'ins',g,text:INS_ITEMS[g][r]})));
+const TOTAL=questions.length;
+const answers=Array(TOTAL).fill(null);
 
-  {sec:'Core driver', q:'Underneath everything, the quiet pressure you carry feels most like…',
-   opts:[
-     {t:'A sense of how things should be — instinct, standards, gut "rightness".', g:'G'},
-     {t:'A concern with worth, image, and being valued or connected.', g:'H'},
-     {t:'A low hum of anxiety — anticipating what could go wrong.', g:'D'}]},
-  {sec:'Core driver', q:'The thing you most quietly protect is…',
-   opts:[
-     {t:'Your autonomy and your boundaries — not being controlled or wronged.', g:'G'},
-     {t:'Your identity and how you’re seen — being someone of value.', g:'H'},
-     {t:'Your sense of security — having enough certainty to feel safe.', g:'D'}]}
-];
+const SCALE=[{v:1,l:'Not me',c:'s1'},{v:2,l:'Rarely',c:'s2'},{v:3,l:'Neutral',c:'s3'},{v:4,l:'Often',c:'s4'},{v:5,l:'Very me',c:'s5'}];
 
-/* ---------- INSTINCT QUESTIONS (6) ---------- */
-const insQ = [
-  {q:'Walking into a new space, the first thing you register is…',
-   opts:[{t:'Comfort, exits, temperature — whether you have what you need.',g:'SP'},
-         {t:'The people and dynamics — where you fit in the room.',g:'SO'},
-         {t:'The one or two people you feel an immediate pull toward.',g:'SX'}]},
-  {q:'You feel most alive when…',
-   opts:[{t:'Life is stable, your nest is secure, your needs are handled.',g:'SP'},
-         {t:'You’re part of something — contributing, connected, in the mix.',g:'SO'},
-         {t:'There’s intensity and chemistry — a deep one-on-one charge.',g:'SX'}]},
-  {q:'Your energy and resources naturally flow toward…',
-   opts:[{t:'Security, health, home, savings, and steady routine.',g:'SP'},
-         {t:'People, causes, your role and standing in the group.',g:'SO'},
-         {t:'Whoever or whatever is fascinating you right now.',g:'SX'}]},
-  {q:'Stress first shows up as worry about…',
-   opts:[{t:'Resources, health, money, practical survival.',g:'SP'},
-         {t:'Your place in the group — being valued or left out.',g:'SO'},
-         {t:'A specific person or bond — attraction, being chosen.',g:'SX'}]},
-  {q:'In conversation you’re drawn to…',
-   opts:[{t:'Practical, grounded, genuinely useful talk.',g:'SP'},
-         {t:'Group threads — who’s doing what, how it all connects.',g:'SO'},
-         {t:'Deep, charged, intimate or provocative exchange.',g:'SX'}]},
-  {q:'Others might say you over-invest in…',
-   opts:[{t:'Self-sufficiency and your own comfort.',g:'SP'},
-         {t:'Reading the room and your reputation.',g:'SO'},
-         {t:'Intensity and the people who magnetise you.',g:'SX'}]}
-];
+/* ============================ STATE ============================ */
+let started=false, step=0;
+const app=document.getElementById('app'), prog=document.getElementById('prog');
+const phaseEl=document.getElementById('phase'), countEl=document.getElementById('count');
+const barEl=document.querySelector('.bar'), metaEl=document.querySelector('.step-meta');
+const toastEl=document.getElementById('toast');
 
-const INS = {SP:{n:'Self-Preservation',d:'body · safety · comfort · resources'},
-             SO:{n:'Social',d:'belonging · group · status · contribution'},
-             SX:{n:'One-to-One',d:'intensity · chemistry · charged bonds'}};
-
-/* ---------- STATE ---------- */
-const total = coreQ.length + 1 /*wing*/ + insQ.length; // +1 wing step inserted after core
-let step = 0;                 // 0..coreQ.length-1 core, then wing, then instincts, then result
-let coreAns = Array(coreQ.length).fill(null);
-let insAns  = Array(insQ.length).fill(null);
-let wingChoice = null;        // neighbor type number
-let result = null;            // computed core type number
-
-const app = document.getElementById('app');
-const prog = document.getElementById('prog');
-const phaseEl = document.getElementById('phase');
-const countEl = document.getElementById('count');
-const barEl = document.querySelector('.bar');
-const metaEl = document.querySelector('.step-meta');
-let started = false;          // intro screen shows until "Begin"
-
-function tally(){
-  const c={A:0,C:0,W:0,P:0,K:0,R:0,G:0,H:0,D:0};
-  coreAns.forEach((a,i)=>{ if(a!=null) c[coreQ[i].opts[a].g]++; });
-  return c;
-}
-function scoreTypes(){
-  const c=tally(); const s={};
-  for(const n in TYPES){const t=TYPES[n]; s[n]=c[t.horn]+c[t.harm]+c[t.center];}
-  return s;
-}
-function topType(){
-  const s=scoreTypes();
-  let best=[]; let max=-1;
-  for(const n in s){ if(s[n]>max){max=s[n];best=[+n];} else if(s[n]===max){best.push(+n);} }
-  // tie-break: higher combined horn+harm signal (ignore center), else lowest number
-  if(best.length>1){
-    const c=tally();
-    best.sort((a,b)=> (c[TYPES[b].horn]+c[TYPES[b].harm]) - (c[TYPES[a].horn]+c[TYPES[a].harm]) || a-b );
-  }
-  // runner-up
-  const ranked=Object.keys(s).map(Number).sort((a,b)=>s[b]-s[a]);
-  return {core:best[0], runner: ranked.find(n=>n!==best[0])};
-}
-function neighbors(n){ const lo=n===1?9:n-1; const hi=n===9?1:n+1; return [lo,hi]; }
-function instinctStack(){
-  const c={SP:0,SO:0,SX:0};
-  insAns.forEach((a,i)=>{ if(a!=null) c[insQ[i].opts[a].g]++; });
-  const order=['SP','SX','SO']; // stable tie-break priority
-  return Object.keys(c).sort((a,b)=> c[b]-c[a] || order.indexOf(a)-order.indexOf(b));
-}
-
-/* ---------- RENDER ---------- */
-function setProgress(done){
-  prog.style.width = (done/total*100)+'%';
-  countEl.textContent = Math.min(done+1,total)+' / '+total;
-}
-function optionMarkup(opts, selected, handler){
-  return opts.map((o,i)=>`<button class="opt ${selected===i?'sel':''}" data-i="${i}">
-      <span class="dot"></span><span>${o.t}</span></button>`).join('');
-}
-
-/* ---------- ENNEAGRAM DIAGRAM ---------- */
+/* ============================ ENNEAGRAM DIAGRAM ============================ */
 const ENN_POS={1:[179.1,49.5],2:[210.6,104],3:[199.7,166],4:[151.5,206.5],
   5:[88.5,206.5],6:[40.3,166],7:[29.4,104],8:[60.9,49.5],9:[120,28]};
-function ennLine(a,b){const[x1,y1]=ENN_POS[a],[x2,y2]=ENN_POS[b];return `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}"/>`;}
-function buildEnneagram(hi,wing){
+function ennLine(a,b,cls){const[x1,y1]=ENN_POS[a],[x2,y2]=ENN_POS[b];return `<line class="${cls||''}" x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}"/>`;}
+function buildEnneagram(o){
+  o=o||{};
+  const inner=[['1','4'],['4','2'],['2','8'],['8','5'],['5','7'],['7','1'],['9','3'],['3','6'],['6','9']]
+    .map(p=>ennLine(p[0],p[1])).join('');
+  let arrows='';
+  if(o.core&&o.grow)   arrows+=ennLine(o.core,o.grow,'arrow grow');
+  if(o.core&&o.strain) arrows+=ennLine(o.core,o.strain,'arrow strain');
   const nodes=Object.keys(ENN_POS).map(n=>{
-    const [x,y]=ENN_POS[n]; const cls=+n===hi?'enn-node lit':(+n===wing?'enn-node wing':'enn-node');
+    const N=+n; let cls='enn-node';
+    if(N===o.core) cls='enn-node lit';
+    else if(N===o.wing) cls='enn-node wing';
+    else if(N===o.grow) cls='enn-node grow';
+    else if(N===o.strain) cls='enn-node strain';
+    const [x,y]=ENN_POS[n];
     return `<g class="${cls}"><circle cx="${x}" cy="${y}" r="13"/><text x="${x}" y="${y+4.5}">${n}</text></g>`;
   }).join('');
-  const hexad=[['1','4'],['4','2'],['2','8'],['8','5'],['5','7'],['7','1']].map(p=>ennLine(p[0],p[1])).join('');
-  const tri=[['9','3'],['3','6'],['6','9']].map(p=>ennLine(p[0],p[1])).join('');
-  return `<svg viewBox="0 0 240 240" class="enn" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Enneagram diagram of the nine types">
-    <circle cx="120" cy="120" r="92" class="enn-ring"/><g class="enn-inner">${hexad}${tri}</g>${nodes}</svg>`;
+  return `<svg viewBox="0 0 240 240" class="enn" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Enneagram diagram">
+    <circle cx="120" cy="120" r="92" class="enn-ring"/><g class="enn-inner">${inner}${arrows}</g>${nodes}</svg>`;
 }
 
+/* ============================ RENDER ============================ */
+function setProgress(s){prog.style.width=(s/TOTAL*100)+'%';countEl.textContent=Math.min(s+1,TOTAL)+' / '+TOTAL;}
+function scaleMarkup(sel){
+  return '<div class="scale">'+SCALE.map(s=>
+    `<button class="sbtn ${s.c} ${sel===s.v?'sel':''}" data-v="${s.v}" aria-label="${s.l}"><span class="ring"></span><span class="lab">${s.l}</span></button>`
+  ).join('')+'</div>';
+}
 function renderIntro(){
   barEl.style.display='none'; metaEl.style.display='none';
   app.innerHTML=`<div class="intro">
     <h2>The Enneagram, in brief</h2>
-    <p class="lead">Nine core types sit around a circle. You have one dominant type — coloured by a neighbouring <em>wing</em> and an <em>instinctual stacking</em>. This short test finds all three.</p>
+    <p class="lead">Nine core types sit around a circle. You have one dominant type — coloured by a neighbouring <em>wing</em> and an <em>instinctual stacking</em>. This test measures all nine directly and shows you the full picture.</p>
     ${buildEnneagram()}
     <div class="defs">
       <div class="def"><b>① Core type (1–9)</b><p>Your deepest motivation — the <em>why</em> underneath what you do. Everyone has exactly one.</p></div>
       <div class="def"><b>② Wing</b><p>One of the two types either side of yours on the circle that flavours it — written like <em>9w1</em>.</p></div>
       <div class="def"><b>③ Instinctual stacking</b><p>The priority order of three survival drives — Self-Preservation, Social, One-to-One — e.g. <em>sp/sx/so</em>.</p></div>
     </div>
-    <p class="tip">Answer for how you <em>actually</em> are, not how you'd like to be.<br>14 questions · about 3 minutes · nothing is saved or sent.</p>
+    <div class="howto"><b>How to answer:</b> you'll rate <b>45 short statements</b> from <em>“Not me”</em> to <em>“Very me”</em>. Don't overthink — go with your gut, and answer for how you <em>actually</em> are across your life, not how you are on your best day or wish you were.</div>
+    <p class="tip">About 6–8 minutes · you can go back any time · nothing is saved or sent.</p>
     <div class="begin-wrap"><button class="btn go" id="begin">Begin test →</button></div>
   </div>`;
   document.getElementById('begin').onclick=()=>{started=true;render();};
 }
-
 function render(){
-  document.body.classList.add('nohover');   // freshly-rendered screen: ignore the cursor sitting on a same-position option until it actually moves
+  document.body.classList.add('nohover');
   if(!started){renderIntro();return;}
   barEl.style.display=''; metaEl.style.display='';
-  // CORE
-  if(step < coreQ.length){
-    const q=coreQ[step];
-    phaseEl.textContent='Core type';
-    setProgress(step);
-    app.innerHTML = `<div class="q"><span class="sec">${q.sec}</span>${q.q}</div>
-      ${optionMarkup(q.opts, coreAns[step])}
-      <div class="nav">
-        <button class="btn" id="back" ${step===0?'disabled':''}>← Back</button>
-        <button class="btn go" id="next" ${coreAns[step]==null?'disabled':''}>Next →</button>
-      </div>`;
-    app.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{coreAns[step]=+b.dataset.i;step++;render();});
-    document.getElementById('back').onclick=()=>{step--;render();};
-    document.getElementById('next').onclick=()=>{if(coreAns[step]!=null){step++;render();}};
-    return;
-  }
-  // WING (one tailored question)
-  if(step === coreQ.length){
-    const {core}=topType(); result=core;
-    const [lo,hi]=neighbors(core);
-    phaseEl.textContent='Wing';
-    setProgress(step);
-    const card=(n)=>`<button class="opt" data-w="${n}"><span class="dot"></span>
-      <span><b style="color:var(--gold)">${n} — ${TYPES[n].name}</b><br>
-      <span style="color:var(--mut);font-size:13.5px">${TYPES[n].desire}.</span></span></button>`;
-    app.innerHTML=`<div class="q"><span class="sec">Your wing</span>
-      You came out as type <b>${core} — ${TYPES[core].name}</b>.
-      Which neighbouring flavour colours you more?</div>
-      ${card(lo)}${card(hi)}
-      <div class="nav"><button class="btn" id="back">← Back</button><span></span></div>`;
-    app.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{wingChoice=+b.dataset.w;step++;render();});
-    document.getElementById('back').onclick=()=>{step--;render();};
-    return;
-  }
-  // INSTINCTS
-  const insIdx = step - coreQ.length - 1;
-  if(insIdx < insQ.length){
-    const q=insQ[insIdx];
-    phaseEl.textContent='Instinct stacking';
-    setProgress(step);
-    app.innerHTML=`<div class="q"><span class="sec">Instinct ${insIdx+1} of ${insQ.length}</span>${q.q}</div>
-      ${optionMarkup(q.opts, insAns[insIdx])}
-      <div class="nav">
-        <button class="btn" id="back">← Back</button>
-        <button class="btn go" id="next" ${insAns[insIdx]==null?'disabled':''}>${insIdx===insQ.length-1?'See result ✦':'Next →'}</button>
-      </div>`;
-    app.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{insAns[insIdx]=+b.dataset.i;step++;render();});
-    document.getElementById('back').onclick=()=>{step--;render();};
-    document.getElementById('next').onclick=()=>{if(insAns[insIdx]!=null){step++;render();}};
-    return;
-  }
-  // RESULT
-  renderResult();
+  if(step>=TOTAL){renderResult();return;}
+  const q=questions[step];
+  phaseEl.textContent = q.kind==='core' ? 'Core patterns' : 'Instinctual focus';
+  setProgress(step);
+  app.innerHTML=`<div class="q"><span class="sec">${q.kind==='core'?'How true is this of you?':'Instinct — how true of you?'}</span>${q.text}</div>
+    <div class="scalehint">1 — not like me &nbsp;·&nbsp; 5 — very like me</div>
+    ${scaleMarkup(answers[step])}
+    <div class="nav">
+      <button class="btn" id="back" ${step===0?'disabled':''}>← Back</button>
+      <button class="btn go" id="next" ${answers[step]==null?'disabled':''}>${step===TOTAL-1?'See result ✦':'Next →'}</button>
+    </div>`;
+  app.querySelectorAll('.sbtn').forEach(b=>b.onclick=()=>{answers[step]=+b.dataset.v;step++;render();});
+  document.getElementById('back').onclick=()=>{step=Math.max(0,step-1);render();};
+  document.getElementById('next').onclick=()=>{if(answers[step]!=null){step++;render();}};
 }
 
+/* ============================ SCORING ============================ */
+function neighbors(n){return [n===1?9:n-1, n===9?1:n+1];}
+function results(){
+  const tSum={},tCnt={}; for(let i=1;i<=9;i++){tSum[i]=0;tCnt[i]=0;}
+  const iSum={SP:0,SO:0,SX:0},iCnt={SP:0,SO:0,SX:0};
+  questions.forEach((q,idx)=>{
+    const v=answers[idx]==null?3:answers[idx];
+    if(q.kind==='core'){tSum[q.t]+=v;tCnt[q.t]++;} else {iSum[q.g]+=v;iCnt[q.g]++;}
+  });
+  const tPct={},iPct={};
+  for(let i=1;i<=9;i++) tPct[i]= tCnt[i]?((tSum[i]-tCnt[i])/(tCnt[i]*4))*100 : 0;
+  ['SP','SO','SX'].forEach(g=> iPct[g]= iCnt[g]?((iSum[g]-iCnt[g])/(iCnt[g]*4))*100 : 0);
+
+  const ranked=[1,2,3,4,5,6,7,8,9].sort((a,b)=> tPct[b]-tPct[a] || tSum[b]-tSum[a] || a-b);
+  const core=ranked[0], runner=ranked[1];
+  const [lo,hi]=neighbors(core);
+  const wing = tPct[lo]===tPct[hi] ? (tSum[lo]>=tSum[hi]?lo:hi) : (tPct[lo]>tPct[hi]?lo:hi);
+  const wingBalanced = Math.abs(tPct[lo]-tPct[hi])<5;
+
+  // tritype: highest-scoring type in each centre, ordered by score
+  const tri=Object.values(CENTERS).map(c=> c.types.slice().sort((a,b)=>tPct[b]-tPct[a]||a-b)[0])
+                                  .sort((a,b)=>tPct[b]-tPct[a]||a-b);
+  const prio={SP:0,SX:1,SO:2};
+  const stack=['SP','SO','SX'].sort((a,b)=> iPct[b]-iPct[a] || prio[a]-prio[b]);
+
+  const gap=tPct[core]-tPct[runner];
+  let conf = gap>=15 ? {c:'high',t:'High confidence',msg:'Your lead type stands out clearly from the rest.'}
+           : gap>=7  ? {c:'mod', t:'Moderate confidence',msg:'A fairly clear lead — skim the runner-up below to be sure it isn’t a closer fit.'}
+                     : {c:'low', t:'Close call',msg:`Types ${core} and ${runner} scored almost the same. Read both deep-dives and trust the one whose <b>core fear and desire</b> ring truer — that, not behaviour, decides type.`};
+  return {tSum,tPct,iPct,ranked,core,runner,wing,wingBalanced,tri,tritype:tri.join(''),stack,gap,conf};
+}
+
+function bar(t,pct,me){
+  return `<div class="bar-row ${me?'me':''}"><span class="nm">${t} · ${TYPES[t].name.replace('The ','')}</span>
+    <span class="track"><i style="width:${Math.round(pct)}%"></i></span><span class="pct">${Math.round(pct)}</span></div>`;
+}
 function renderResult(){
-  phaseEl.textContent='Result';
-  prog.style.width='100%'; countEl.textContent=total+' / '+total;
-  const t=TYPES[result];
-  const wing = wingChoice ? `${result}w${wingChoice}` : `${result}`;
-  const st=instinctStack();
-  const {runner}=topType();
-  const stackStr = st.map(x=>x.toLowerCase()).join('/');
-  app.innerHTML=`
-    <div class="res-hero">
-      <div class="res-num">${result}${wingChoice?`<span style="font-size:30px">w${wingChoice}</span>`:''}</div>
+  const R=results(), t=TYPES[R.core];
+  const wingStr=`${R.core}w${R.wing}`;
+  const stackStr=R.stack.map(x=>INS[x].tag).join('/');
+  const centerInfo=CENTERS[t.center];
+  app.innerHTML=
+   `<div class="res-hero">
+      <div class="res-num">${R.core}<span style="font-size:30px">w${R.wing}</span></div>
       <div class="res-name">${t.name}</div>
+      <div class="res-nick">${t.nick}</div>
       <div class="res-tri">${t.tri}</div>
-      <div class="res-stack">${stackStr}<br><small>${st.map(x=>INS[x].n).join(' › ')}</small></div>
+      <div class="chips">
+        <div class="chip">Wing&nbsp; <b>${wingStr}</b>${R.wingBalanced?' <small>(balanced)</small>':''}</div>
+        <div class="chip">Instincts&nbsp; <b>${stackStr}</b></div>
+        <div class="chip">Tritype&nbsp; <b>${R.tritype}</b></div>
+      </div>
     </div>
-    <div class="res-enn">${buildEnneagram(result, wingChoice)}
-      <div class="enn-cap"><span style="color:var(--gold)">●</span> your core${wingChoice?` &nbsp;·&nbsp; <span style="color:var(--gold-d)">○</span> wing (type ${wingChoice})`:''}</div>
+
+    <div class="conf ${R.conf.c}"><b>${R.conf.t}.</b> ${R.conf.msg}</div>
+
+    <div class="res-enn">${buildEnneagram({core:R.core,wing:R.wing,grow:t.grow,strain:t.strain})}
+      <div class="legend">
+        <span><i style="background:var(--gold)"></i>core ${R.core}</span>
+        <span><i style="background:transparent;border:2px solid var(--gold-d)"></i>wing ${R.wing}</span>
+        <span><i style="background:transparent;border:2px solid var(--sage)"></i>growth → ${t.grow}</span>
+        <span><i style="background:transparent;border:2px solid var(--rose)"></i>stress → ${t.strain}</span>
+      </div>
     </div>
-    <div class="grid2">
-      <div class="pill"><div class="t">Core desire</div><div class="v">${t.desire}.</div></div>
-      <div class="pill"><div class="t">Core fear</div><div class="v">${t.fear}.</div></div>
+
+    <div class="section"><h3>Your full type profile</h3>
+      <div class="bars">${R.ranked.map(n=>bar(n,R.tPct[n],n===R.core)).join('')}</div>
+      <p style="margin-top:11px;font-size:12px;color:var(--dim)">Higher bars are patterns that sound more like you. Your top bar is your core type; the next one or two are worth reading as possible wings or mistypes.</p>
     </div>
-    <div class="stackrow">
-      ${st.map((x,i)=>`<div class="ins ${i===0?'lead':''} ${i===2?'blind':''}">
-        <b>${x}</b><span>${INS[x].n}</span><br><span style="font-size:10px">${INS[x].d}</span>
-        ${i===0?'<br><span style="color:var(--gold);font-size:10px">dominant</span>':''}
-        ${i===2?'<br><span style="font-size:10px">blind spot</span>':''}</div>`).join('')}
+
+    <div class="section"><h3>What drives type ${R.core}</h3>
+      <p>${t.motivation}</p>
+      <div class="grid2" style="margin-top:6px">
+        <div class="pill"><div class="t">Core desire</div><div class="v">${t.desire}.</div></div>
+        <div class="pill"><div class="t">Core fear</div><div class="v">${t.fear}.</div></div>
+      </div>
+      <p style="margin-top:11px"><strong>Signature traits.</strong> ${t.traits}</p>
+      <p><strong>At your best.</strong> ${t.best}</p>
+      <p><strong>Under stress.</strong> ${t.stress}</p>
     </div>
-    <div class="runner">Closest alternative: <b>type ${runner} — ${TYPES[runner].name}</b>. If <b>${result}</b> doesn’t ring true, read ${runner} next.</div>
-    <div class="note"><b>How this was read:</b> your answers placed you in the
-      <b>${({A:'Assertive',C:'Dutiful',W:'Withdrawn'})[t.horn]}</b> social style ×
-      <b>${({P:'Positive-Outlook',K:'Competency',R:'Reactive'})[t.harm]}</b> coping stance —
-      a pairing unique to type ${result}, confirmed by your <b>${({G:'Gut',H:'Heart',D:'Head'})[t.center]}</b>-centre driver.
-      The wing and instinct stack are self-selected. Treat this as a strong hypothesis, not a verdict —
-      sit with the type description for a few days before you trust it.</div>
-    <div class="nav"><button class="btn" id="restart">↻ Retake</button><span></span></div>`;
+
+    <div class="section"><h3>Growth &amp; stress paths</h3>
+      <div class="arrows-row">
+        <div class="arrowbox g"><div class="t">▲ Growth → ${t.grow} (${TYPES[t.grow].name.replace('The ','')})</div>
+          <div class="v">When you’re healthy you take on the best of <b>${t.grow}</b>: ${TYPES[t.grow].best}</div></div>
+        <div class="arrowbox s"><div class="t">▼ Stress → ${t.strain} (${TYPES[t.strain].name.replace('The ','')})</div>
+          <div class="v">Under pressure you can slip into the worse side of <b>${t.strain}</b>: ${TYPES[t.strain].stress}</div></div>
+      </div>
+      <p style="margin-top:11px"><strong>Growth tip.</strong> ${t.tip}</p>
+    </div>
+
+    <div class="section"><h3>Your wing — ${wingStr}</h3>
+      <p>Of your two neighbours (${R.core===1?9:R.core-1} and ${R.core===9?1:R.core+1}), type <b>${R.wing}</b> scored higher, so it flavours your core most. It adds ${TYPES[R.wing].flavor}.${R.wingBalanced?' Your two wings scored close, so you likely show both sides depending on the day.':''}</p>
+    </div>
+
+    <div class="section"><h3>Instinctual stacking — ${stackStr}</h3>
+      <div class="insrow">
+        ${R.stack.map((g,i)=>`<div class="ins ${i===0?'lead':''} ${i===2?'blind':''}">
+          <div class="tag">${INS[g].tag}</div>
+          <div><div class="nm">${INS[g].n} <small>· ${i===0?'dominant':i===1?'secondary':'blind spot'}</small></div>
+            <div class="ds">${i===2?INS[g].blind:INS[g].dom}</div></div></div>`).join('')}
+      </div>
+    </div>
+
+    <div class="section"><h3>Your centre — ${centerInfo.label}</h3>
+      <p>Type ${R.core} sits in the <b>${centerInfo.label.toLowerCase()}</b> (types ${centerInfo.types.join(', ')}). Its core emotion is <b>${centerInfo.emo}</b>, and it is most concerned with <b>${centerInfo.about}</b>. Your <b>tritype ${R.tritype}</b> is your top type in each of the three centres — a fuller fingerprint than the core alone.</p>
+    </div>
+
+    <div class="note"><b>How to use this:</b> a 45-item test is a strong starting hypothesis, not a verdict. Type is defined by inner <b>motivation</b> — your core fear and desire — not by behaviour, which any type can share. Sit with your top result for a few days; if it doesn’t fit, read your runner-up (<b>type ${R.runner}</b>). The wing, tritype and instincts are self-report layers on top of the core.</div>
+
+    <div class="resbtns">
+      <button class="btn go" id="copy">Copy my results</button>
+      <button class="btn" id="restart">↻ Retake test</button>
+    </div>`;
+
   document.getElementById('restart').onclick=()=>{
-    step=0;coreAns=Array(coreQ.length).fill(null);insAns=Array(insQ.length).fill(null);
-    wingChoice=null;result=null;render();
+    for(let i=0;i<TOTAL;i++) answers[i]=null;
+    step=0; started=true; window.scrollTo(0,0); render();
   };
+  document.getElementById('copy').onclick=()=>{
+    const summary=
+`Enneagram result — ${wingStr} ${t.name}
+Tritype: ${R.tritype}   Instincts: ${stackStr}
+Top types: ${R.ranked.slice(0,3).map(n=>n+' ('+Math.round(R.tPct[n])+'%)').join(', ')}
+Core desire: ${t.desire}.
+Core fear: ${t.fear}.
+${location.href}`;
+    navigator.clipboard?.writeText(summary).then(showToast,()=>showToast(false))
+      || showToast(false);
+  };
+}
+let toastT;
+function showToast(ok){
+  toastEl.textContent = ok===false ? 'Could not copy — select and copy manually.' : 'Results copied to clipboard ✓';
+  toastEl.classList.add('show'); clearTimeout(toastT);
+  toastT=setTimeout(()=>toastEl.classList.remove('show'),2200);
 }
 
 window.addEventListener('pointermove',()=>document.body.classList.remove('nohover'));
